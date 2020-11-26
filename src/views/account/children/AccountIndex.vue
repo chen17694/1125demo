@@ -17,7 +17,7 @@
             </TabPane>
             <TabPane label="入账">
                 <dl style="line-height: 40px;font-size: 16px;display: flex; align-items: center; flex-wrap: wrap">
-                    <dd v-for="(item, index) in earn" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; width: 25%; text-align: center">
+                    <dd v-for="(item, index) in earn" :key="index" @click="toDetail('earn', item.name)" style="cursor: pointer; width: 25%; text-align: center">
                         <img :src="item.icon" class="icon">{{item.name}}
                     </dd>
                     <dd style="cursor: pointer; width: 25%; text-align: center">
