@@ -3,32 +3,39 @@
         <head-title :title="'记账：'"></head-title>
         <Tabs>
             <TabPane label="消费">
-                <dl style="text-align: center;line-height: 40px;font-size: 16px;">
-                    <dt style="font-weight: bold; font-size: 18px">消费类型:</dt>
-                    <dd @click="toDetail('consumption', '水果零食')" style="cursor: pointer">水果零食</dd>
-                    <dd @click="toDetail('consumption', '餐饮伙食')" style="cursor: pointer">餐饮伙食</dd>
-                    <dd @click="toDetail('consumption', '出行旅游')" style="cursor: pointer">出行旅游</dd>
-                    <dd @click="toDetail('consumption', '网上购物')" style="cursor: pointer">网上购物</dd>
-                    <dd @click="toDetail('consumption', '生活日常')" style="cursor: pointer">生活日常</dd>
-                    <dd @click="toDetail('consumption', '租房水电')" style="cursor: pointer">租房水电</dd>
-                    <dd @click="toDetail('consumption', '医疗药物')" style="cursor: pointer">医疗药物</dd>
-                    <dd @click="toDetail('consumption', '其它消费')" style="cursor: pointer">其它消费</dd>
+                <dl style="line-height: 40px;font-size: 16px;display: flex;justify-content: center; align-items: center;">
+                    <dd v-for="(item, index) in consumption" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; margin: 0 10px; text-align: center">
+                        <img :src="item.icon" class="icon">{{item.name}}
+                    </dd>
+                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                        <img src="../../../assets/images/add.png" @click="modal = true; type = 'consumption'" class="icon">新增
+                    </dd>
+                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                        <img src="../../../assets/images/subtract.png" class="icon" @click="remove('consumption')">删除
+                    </dd>
                 </dl>
             </TabPane>
             <TabPane label="入账">
-                <dl style="text-align: center;line-height: 40px;font-size: 16px;">
-                    <dt style="font-weight: bold; font-size: 18px">消费类型:</dt>
-                    <dd @click="toDetail('earn', '水果零食')" style="cursor: pointer">水果零食</dd>
-                    <dd @click="toDetail('earn', '餐饮伙食')" style="cursor: pointer">餐饮伙食</dd>
-                    <dd @click="toDetail('earn', '出行旅游')" style="cursor: pointer">出行旅游</dd>
-                    <dd @click="toDetail('earn', '网上购物')" style="cursor: pointer">网上购物</dd>
-                    <dd @click="toDetail('earn', '生活日常')" style="cursor: pointer">生活日常</dd>
-                    <dd @click="toDetail('earn', '租房水电')" style="cursor: pointer">租房水电</dd>
-                    <dd @click="toDetail('earn', '医疗药物')" style="cursor: pointer">医疗药物</dd>
-                    <dd @click="toDetail('earn', '其它消费')" style="cursor: pointer">其它消费</dd>
+                <dl style="line-height: 40px;font-size: 16px;display: flex;justify-content: center; align-items: center;">
+                    <dd v-for="(item, index) in earn" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; margin: 0 10px; text-align: center">
+                        <img :src="item.icon" class="icon">{{item.name}}
+                    </dd>
+                    <dd style="cursor: pointer; margin: 0 10px">
+                        <img src="../../../assets/images/add.png" @click="modal = true; type = 'earn'" class="icon">新增
+                    </dd>
+                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                        <img src="../../../assets/images/subtract.png" class="icon" @click="remove('earn')">删除
+                    </dd>
                 </dl>
             </TabPane>
         </Tabs>
+        <Modal
+            v-model="modal"
+            title="新增类型"
+            @on-ok="save"
+            @on-cancel="cancel">
+            <Input v-model="value" placeholder="类型名称"/>
+        </Modal>
     </div>
 </template>
 <script>
@@ -36,13 +43,125 @@
     import headTitle from '../../../components/head-title.vue'
     export default {
         name: 'account_index',
+        data () {
+          return {
+              value: '',
+              type: 'consumption',
+              modal: false,
+              earn: [
+                  {
+                      name: '基本工资',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '公司福利',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '其它入账',
+                      icon: require('../../../assets/images/default.png')
+                  }
+              ],
+              consumption: [
+                  {
+                      name: '水果零食',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '餐饮伙食',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '出行旅游',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '网上购物',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '生活日常',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '租房水电',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '医疗药物',
+                      icon: require('../../../assets/images/default.png')
+                  },
+                  {
+                      name: '其它消费',
+                      icon: require('../../../assets/images/default.png')
+                  }
+              ]
+          }
+        },
         created () {
+            let consumption = JSON.parse(sessionStorage.getItem('consumption'))
+            let earn = JSON.parse(sessionStorage.getItem('earn'))
+            console.log(earn)
+            if (consumption && consumption.length > 0) {
+                let arr = consumption.map((item) => {
+                    return {
+                        name: item,
+                        icon: require('../../../assets/images/default.png')
+                    }
+                })
+                this.consumption = arr
+            }
+            if (earn && earn.length > 0) {
+                let arr = earn.map((item) => {
+                    return {
+                        name: item,
+                        icon: require('../../../assets/images/default.png')
+                    }
+                })
+                this.earn = arr
+            }
             this.setNavIndex();
         },
         components: {
             headTitle
         },
         methods: {
+            remove (type) {
+                this.type = type
+                if (this.type === 'consumption') {
+                    this.consumption.pop()
+                    this.setLocalStorage('consumption', this.consumption)
+                } else {
+                    this.earn.pop()
+                    this.setLocalStorage('earn', this.earn)
+                }
+            },
+            setLocalStorage (name, data) {
+                let arr = data.map((item) => {
+                    return item.name
+                })
+                sessionStorage.setItem(name, JSON.stringify(arr))
+                console.log(JSON.parse(sessionStorage.getItem(name)))
+            },
+            save () {
+                if (this.type === 'consumption') {
+                    this.consumption.push({
+                        name: this.value,
+                        icon: require('../../../assets/images/default.png')
+                    })
+                    this.setLocalStorage('consumption', this.consumption)
+                } else {
+                    this.earn.push({
+                        name: this.value,
+                        icon: require('../../../assets/images/default.png')
+                    })
+                    this.setLocalStorage('earn', this.earn)
+                }
+                this.value = ''
+            },
+            cancel () {
+                this.value = ''
+            },
             toDetail (name, val) {
               this.$router.push({
                   name,
@@ -57,12 +176,18 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" >
     @import "../../../assets/scss/define";
-    .ivu-tabs-nav {
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
+    .icon{
+        width: 50px;
+        display: block;
+        margin: 0 auto;
+    }
+    .ivu-tabs-nav-wrap {
+        text-align: center;
+    }
+    .ivu-tabs-nav-scroll {
+        display: inline-block;
     }
     .go-btn-box{
         @extend %pa;

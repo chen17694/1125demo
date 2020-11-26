@@ -24,6 +24,13 @@
             <li class="input-item input-required">
                 <x-input v-model="sum_value" title="金额（￥）：" keyboard="number"></x-input>
             </li>
+            <li class="input-item input-required">
+                <popup-picker
+                    title="支付方式："
+                    :data="pay_type_arr"
+                    v-model="pay_type">
+                </popup-picker>
+            </li>
             <li class="input-item">
                 <x-input v-model="remarks_value" title="备注："></x-input>
             </li>
@@ -51,8 +58,10 @@
                 is_btn_active: false,
                 sum_value: '',
                 remarks_value: '',
-                account_type_arr: [['基本工资', '公司福利', '其它入账']],
+                account_type_arr: [JSON.parse(sessionStorage.getItem('earn'))],
                 account_type:['基本工资'],
+                pay_type_arr: [['现金支付','信用卡支付', '网银支付', '微信支付', '支付宝支付']],
+                pay_type:['现金支付'],
                 date_value: 'TODAY',
                 time_value: Tool.format('hh:mm')
             }
