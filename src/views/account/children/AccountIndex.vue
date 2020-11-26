@@ -3,27 +3,27 @@
         <head-title :title="'记账：'"></head-title>
         <Tabs>
             <TabPane label="消费">
-                <dl style="line-height: 40px;font-size: 16px;display: flex;justify-content: center; align-items: center;">
-                    <dd v-for="(item, index) in consumption" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; margin: 0 10px; text-align: center">
+                <dl style="line-height: 40px;font-size: 16px;display: flex; align-items: center; flex-wrap: wrap">
+                    <dd v-for="(item, index) in consumption" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; width: 25%; text-align: center">
                         <img :src="item.icon" class="icon">{{item.name}}
                     </dd>
-                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                    <dd style="cursor: pointer; width: 25%; text-align: center">
                         <img src="../../../assets/images/add.png" @click="modal = true; type = 'consumption'" class="icon">新增
                     </dd>
-                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                    <dd style="cursor: pointer; width: 25%; text-align: center">
                         <img src="../../../assets/images/subtract.png" class="icon" @click="remove('consumption')">删除
                     </dd>
                 </dl>
             </TabPane>
             <TabPane label="入账">
-                <dl style="line-height: 40px;font-size: 16px;display: flex;justify-content: center; align-items: center;">
-                    <dd v-for="(item, index) in earn" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; margin: 0 10px; text-align: center">
+                <dl style="line-height: 40px;font-size: 16px;display: flex; align-items: center; flex-wrap: wrap">
+                    <dd v-for="(item, index) in earn" :key="index" @click="toDetail('consumption', item.name)" style="cursor: pointer; width: 25%; text-align: center">
                         <img :src="item.icon" class="icon">{{item.name}}
                     </dd>
-                    <dd style="cursor: pointer; margin: 0 10px">
+                    <dd style="cursor: pointer; width: 25%; text-align: center">
                         <img src="../../../assets/images/add.png" @click="modal = true; type = 'earn'" class="icon">新增
                     </dd>
-                    <dd style="cursor: pointer; margin: 0 10px; text-align: center">
+                    <dd style="cursor: pointer; width: 25%; text-align: center">
                         <img src="../../../assets/images/subtract.png" class="icon" @click="remove('earn')">删除
                     </dd>
                 </dl>
